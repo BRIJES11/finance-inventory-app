@@ -1,0 +1,47 @@
+from flask import Flask, render_template
+from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
+from flask_login import LoginManager, login_required, current_user
+from auth import auth
+from db import client, db
+from bson import ObjectId
+from models import User
+
+load_dotenv()
+
+app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY')
+
+try:
+    client.admin.command("ping")
+    print("MongoDB connection successfully")
+except Exception as e:
+    print(f"MongoDB connection failed: {e}")
+
+#flask -login setup
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "auth.login"
+
+@login_manager.user_loader
+def load_user(user_id):
+    user_data = db.users.find_one({"_id": ObjectId(user_id)})
+    if user_data:
+        return User(
+            id=str(user_data["_id"]),
+            name=user_data["name"],
+            email=user_data["email"],
+            password=user_data["password"]
+        )
+    return None
+
+app.register_blueprint(auth)
+
+@app.route("/")
+@login_required
+def home():
+    return f"Welcome {current_user.name}! You are logged in."
+
+if __name__ == '__main__':
+    app.run(debug=True)
