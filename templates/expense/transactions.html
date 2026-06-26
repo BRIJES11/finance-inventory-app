@@ -7,6 +7,13 @@
     <h2>My Transactions</h2>
     <a href="/expense/add">Add New Transaction</a><br><br>
 
+    <form method="GET">
+        <input type="month" name="month" placeholder="Filter by month">
+        <input type="text" name="category" placeholder="Filter by category">
+        <button type="submit">Filter</button>
+        <a href="/expense/transactions">Clear</a>
+    </form><br>
+
     <table border="1">
         <tr>
             <th>Date</th>
@@ -24,6 +31,10 @@
             <td>{{ transaction.category }}</td>
             <td>{{ transaction.amount }}</td>
             <td>{{ transaction.note }}</td>
+            <td>
+                <a href="/expense/edit/{{ transaction._id }}">Edit</a>
+                <a href="/expense/delete/{{ transaction._id }}">Delete</a>
+            </td>
         </tr>
         {% endfor %}
     </table>

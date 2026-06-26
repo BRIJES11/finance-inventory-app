@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Transaction</title>
+</head>
+<body>
+    <h2>Edit Transaction</h2>
+    <form method="POST">
+        <select name="account">
+            <option value="personal" {% if transaction.account == "personal" %}selected{% endif %}>Personal</option>
+            <option value="business" {% if transaction.account == "business" %}selected{% endif %}>Business</option>
+        </select><br><br>
+
+        <select name="type">
+            <option value="income" {% if transaction.type == "income" %}selected{% endif %}>Income</option>
+            <option value="expense" {% if transaction.type == "expense" %}selected{% endif %}>Expense</option>
+        </select><br><br>
+
+        <input type="text" name="category" value="{{ transaction.category }}" required><br><br>
+        <input type="number" name="amount" value="{{ transaction.amount }}" step="0.01" required><br><br>
+        <input type="date" name="date" value="{{ transaction.date }}" required><br><br>
+        <input type="text" name="note" value="{{ transaction.note }}"><br><br>
+
+        <button type="submit">Update Transaction</button>
+    </form>
+    <a href="/expense/transactions">Cancel</a>
+</body>
+</html>
