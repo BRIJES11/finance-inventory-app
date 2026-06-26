@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>My Dashboard</h2>
+    <a href="/expense/transactions">View Transactions</a> |
+    <a href="/expense/add">Add Transaction</a> |
+    <a href="/auth/logout">Logout</a>
+
+    <br><br>
+
+    <!-- Summary Cards -->
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Total Income</th>
+            <th>Total Expenses</th>
+            <th>Balance</th>
+        </tr>
+        <tr>
+            <td>₦{{ "%.2f"|format(total_income) }}</td>
+            <td>₦{{ "%.2f"|format(total_expenses) }}</td>
+            <td>₦{{ "%.2f"|format(balance) }}</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <!-- Pie Chart -->
+    <h3>Spending by Category</h3>
+    <canvas id="pieChart" width="400" height="400"></canvas>
+
+    <script>
+        const categoryLabels = {{ category_totals.keys()|list|tojson }};
+        const categoryValues = {{ category_totals.values()|list|tojson }};
+
+        new Chart(document.getElementById("pieChart"), {
+            type: "pie",
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryValues,
+                    backgroundColor: [
+                        "#FF6384", "#36A2EB", "#FFCE56",
+                        "#4BC0C0", "#9966FF", "#FF9F40"
+                    ]
+                }]
+            }
+        });
+    </script>
+
+</body>
+</html>

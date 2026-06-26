@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
@@ -43,7 +43,7 @@ app.register_blueprint(expense)
 @app.route("/")
 @login_required
 def home():
-    return f"Welcome {current_user.name}! You are logged in."
+    return redirect(url_for("expense.dashboard"))
 
 
 
