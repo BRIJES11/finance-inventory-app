@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transactions</title>
+</head>
+<body>
+    <h2>My Transactions</h2>
+    <a href="/expense/add">Add New Transaction</a><br><br>
+
+    <table border="1">
+        <tr>
+            <th>Date</th>
+            <th>Account</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Note</th>
+        </tr>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.date }}</td>
+            <td>{{ transaction.account }}</td>
+            <td>{{ transaction.type }}</td>
+            <td>{{ transaction.category }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.note }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

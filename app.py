@@ -7,6 +7,7 @@ from auth import auth
 from db import client, db
 from bson import ObjectId
 from models import User
+from expense import expense
 
 load_dotenv()
 
@@ -37,11 +38,14 @@ def load_user(user_id):
     return None
 
 app.register_blueprint(auth)
+app.register_blueprint(expense)
 
 @app.route("/")
 @login_required
 def home():
     return f"Welcome {current_user.name}! You are logged in."
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

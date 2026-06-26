@@ -41,7 +41,8 @@ def login():
                 password=user_data["password"]
             )
             login_user(user)
-            return redirect(url_for("home"))
+            next_page = request.args.get("next")
+            return redirect(next_page or url_for("home"))
         return redirect(url_for("auth.login"))
     return render_template("auth/login.html")
 @auth.route("/logout")
