@@ -28,7 +28,7 @@ def add():
         return redirect(url_for("expense.transactions"))
     return render_template("expense/add_transaction.html")
 
-@expense.route("/transactions", methods=["GET", "POST"])
+@expense.route("/transactions", methods=["GET"])
 @login_required
 def transactions():
     month = request.args.get("month")
@@ -37,8 +37,8 @@ def transactions():
     if month:
         query["date"] = {"$regex": f"^{month}"}
     if category:
-        query["category"] = category
-    transactions = list(db.transactions.find({"user_id": current_user.id}))
+        query["category"] = {"$regex": f"^{category}$", "$options": "i"}
+    transactions = list(db.transactions.find(query))
     return render_template("expense/transactions.html", transactions=transactions)
 
 @expense.route("/edit/<transaction_id>", methods=["GET", "POST"])
