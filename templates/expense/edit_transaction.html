@@ -1,28 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Transaction</title>
-</head>
-<body>
-    <h2>Edit Transaction</h2>
-    <form method="POST">
-        <select name="account">
-            <option value="personal" {% if transaction.account == "personal" %}selected{% endif %}>Personal</option>
-            <option value="business" {% if transaction.account == "business" %}selected{% endif %}>Business</option>
-        </select><br><br>
+{% extends "base.html" %}
 
-        <select name="type">
-            <option value="income" {% if transaction.type == "income" %}selected{% endif %}>Income</option>
-            <option value="expense" {% if transaction.type == "expense" %}selected{% endif %}>Expense</option>
-        </select><br><br>
+{% block content %}
 
-        <input type="text" name="category" value="{{ transaction.category }}" required><br><br>
-        <input type="number" name="amount" value="{{ transaction.amount }}" step="0.01" required><br><br>
-        <input type="date" name="date" value="{{ transaction.date }}" required><br><br>
-        <input type="text" name="note" value="{{ transaction.note }}"><br><br>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-4">✏️ Edit Transaction</h3>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Account</label>
+                        <select name="account" class="form-select">
+                            <option value="personal" {% if transaction.account == "personal" %}selected{% endif %}>Personal</option>
+                            <option value="business" {% if transaction.account == "business" %}selected{% endif %}>Business</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        <select name="type" class="form-select">
+                            <option value="income" {% if transaction.type == "income" %}selected{% endif %}>Income</option>
+                            <option value="expense" {% if transaction.type == "expense" %}selected{% endif %}>Expense</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <input type="text" name="category" class="form-control" value="{{ transaction.category }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Amount (₦)</label>
+                        <input type="number" name="amount" class="form-control" value="{{ transaction.amount }}" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <input type="date" name="date" class="form-control" value="{{ transaction.date }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Note (optional)</label>
+                        <input type="text" name="note" class="form-control" value="{{ transaction.note }}">
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100">Update Transaction</button>
+                    <a href="/expense/transactions" class="btn btn-secondary w-100 mt-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <button type="submit">Update Transaction</button>
-    </form>
-    <a href="/expense/transactions">Cancel</a>
-</body>
-</html>
+{% endblock %}

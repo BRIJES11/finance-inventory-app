@@ -1,28 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Transaction</title>
-</head>
-<body>
-    <h2>Add Transaction</h2>
-    <form method="POST">
-        <select name="account">
-            <option value="personal">Personal</option>
-            <option value="business">Business</option>
-        </select><br><br>
+{% extends "base.html" %}
 
-        <select name="type">
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
-        </select><br><br>
+{% block content %}
 
-        <input type="text" name="category" placeholder="Category (e.g Food, Rent)" required><br><br>
-        <input type="number" name="amount" placeholder="Amount" step="0.01" required><br><br>
-        <input type="date" name="date" required><br><br>
-        <input type="text" name="note" placeholder="Note (optional)"><br><br>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-4">➕ Add Transaction</h3>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Account</label>
+                        <select name="account" class="form-select">
+                            <option value="personal">Personal</option>
+                            <option value="business">Business</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        <select name="type" class="form-select">
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <input type="text" name="category" class="form-control" placeholder="e.g Food, Rent, Transport" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Amount (₦)</label>
+                        <input type="number" name="amount" class="form-control" placeholder="0.00" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <input type="date" name="date" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Note (optional)</label>
+                        <input type="text" name="note" class="form-control" placeholder="Add a note">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Add Transaction</button>
+                    <a href="/expense/transactions" class="btn btn-secondary w-100 mt-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <button type="submit">Add Transaction</button>
-    </form>
-    <a href="/expense/transactions">View Transactions</a>
-</body>
-</html>
+{% endblock %}
