@@ -8,6 +8,7 @@ from db import client, db
 from bson import ObjectId
 from models import User
 from expense import expense
+from inventory import inventory
 
 load_dotenv()
 
@@ -39,6 +40,7 @@ def load_user(user_id):
 
 app.register_blueprint(auth)
 app.register_blueprint(expense)
+app.register_blueprint(inventory)
 
 @app.route("/")
 @login_required
