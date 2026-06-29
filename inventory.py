@@ -35,5 +35,53 @@ def add():
 @inventory.route("/products", methods=["GET"])
 @login_required
 def products():
-    products = list(db.products.find({"user_id": current_user.id}))
+    search = request.args.get("search")
+    category = request.args.get("category")
+    query = {"user_id": current_user.id}
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"sku": {"$regex": search, "$options": "i"}}
+        ]
+    if category:
+        query["category"] = {"$regex": f"^{category}$", "$options":"i"}
+
+    products = list(db.products.find(query))
     return render_template("inventory/products.html", products=products)
+
+@inventory.route("/edit/<product_id>", methods=["GET", "POST"])
+@login_required
+def edit(product_id):
+    product = db.products.find_one({"_id": ObjectId(product_id),})
+    if request.method == "POST":
+        name = request.form["name"]
+        sku = request.form["sku"]
+        category = request.form["category"]
+        buying_price = float(request.form["buying_price"])
+        selling_price = float(request.form["selling_price"])
+        quantity = int(request.form["quantity"])
+        low_stock_threshold = int(request.form["low_stock_threshold"])
+        supplier = request.form["supplier"]
+        
+        db.products.update_one(
+            {"_id": ObjectId(product_id)},
+            {"$set": {
+                "name": name,
+                "sku": sku,
+                "category": category,
+                "buying_price": buying_price,
+                "selling_price": selling_price,
+                "quantity": quantity,
+                "low_stock_threshold": low_stock_threshold,
+                "supplier": supplier,
+            }}
+        )
+        return redirect(url_for("inventory.products"))
+    return render_template("inventory/edit_product.html", product=product)
+
+@inventory.route("/delete/<product_id>")
+@login_required
+def delete(product_id):
+    db.products.delete_one({"_id":ObjectId(product_id)})
+    return redirect(url_for("inventory.products"))
+

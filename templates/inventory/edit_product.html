@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-4">✏️ Edit Product</h3>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Product Name</label>
+                        <input type="text" name="name" class="form-control" value="{{ product.name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">SKU</label>
+                        <input type="text" name="sku" class="form-control" value="{{ product.sku }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <input type="text" name="category" class="form-control" value="{{ product.category }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Buying Price (₦)</label>
+                        <input type="number" name="buying_price" class="form-control" value="{{ product.buying_price }}" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Selling Price (₦)</label>
+                        <input type="number" name="selling_price" class="form-control" value="{{ product.selling_price }}" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" name="quantity" class="form-control" value="{{ product.quantity }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Low Stock Threshold</label>
+                        <input type="number" name="low_stock_threshold" class="form-control" value="{{ product.low_stock_threshold }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Supplier</label>
+                        <input type="text" name="supplier" class="form-control" value="{{ product.supplier }}">
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100">Update Product</button>
+                    <a href="/inventory/products" class="btn btn-secondary w-100 mt-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
