@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">📋 History — {{ product.name }}</h2>
+<a href="/inventory/products" class="btn btn-secondary mb-3">← Back to Products</a>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Date</th>
+                    <th>Action</th>
+                    <th>Quantity</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in history %}
+                <tr>
+                    <td>{{ record.date }}</td>
+                    <td>
+                        {% if record.action == "restock" %}
+                            <span class="badge bg-success">+ Restock</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">- Sale</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ record.quantity }}</td>
+                    <td>{{ record.note }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

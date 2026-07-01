@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
+from auth import login
 from db import db
 from bson import ObjectId
+from datetime import date
 
 inventory = Blueprint("inventory", __name__, url_prefix="/inventory")
 
@@ -52,7 +54,7 @@ def products():
 @inventory.route("/edit/<product_id>", methods=["GET", "POST"])
 @login_required
 def edit(product_id):
-    product = db.products.find_one({"_id": ObjectId(product_id),})
+    product = db.products.find_one({"_id": ObjectId(product_id)})
     if request.method == "POST":
         name = request.form["name"]
         sku = request.form["sku"]
@@ -84,4 +86,61 @@ def edit(product_id):
 def delete(product_id):
     db.products.delete_one({"_id":ObjectId(product_id)})
     return redirect(url_for("inventory.products"))
+
+@inventory.route("/restock/<product_id>", methods=["GET", "POST"])
+@login_required
+def restock(product_id):
+    product = db.products.find_one({"_id":ObjectId(product_id)})
+    if request.method == "POST":
+        quantity = int(request.form["quantity"])
+        note = request.form["note"]
+        
+        db.products.update_one(
+            {"_id": ObjectId(product_id)},
+            {"$inc": {"quantity": quantity}}
+        )
+        db.history.insert_one({
+            "product_id": product_id,
+            "user_id": current_user.id,
+            "action": "restock",
+            "quantity": quantity,
+            "date": str(date.today()),
+            "note": note
+        })
+        return redirect(url_for("inventory.products"))
+    return render_template("inventory/restock.html", product=product)
+
+@inventory.route("/sell/<product_id>", methods=["GET", "POST"])
+@login_required
+def sell(product_id):
+    product = db.products.find_one({"_id":ObjectId(product_id)})
+    if request.method == "POST":
+        quantity = int(request.form["quantity"])
+        note = request.form["note"]
+        
+        db.products.update_one(
+            {"_id": ObjectId(product_id)},
+            {"$inc": {"quantity": -quantity}}
+        )
+        db.history.insert_one({
+            "product_id": product_id,
+            "user_id": current_user.id,
+            "action": "sell",
+            "quantity": quantity,
+            "date": str(date.today()),
+            "note": note
+        })
+        return redirect(url_for("inventory.products"))
+    return render_template("inventory/sell.html", product=product)
+
+@inventory.route("/history/<product_id>", methods=["GET"])
+@login_required
+def history(product_id):
+    product = db.products.find_one({"_id": ObjectId(product_id)})
+    history = list(db.history.find({"product_id": product_id}))
+    return render_template("inventory/history.html", product=product, history=history)
+
+
+
+
 

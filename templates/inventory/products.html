@@ -60,7 +60,10 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="/inventory/edit/{{ product._id }}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="/inventory/restock/{{ product._id }}" class="btn btn-sm btn-success">+ Restock</a>
+                        <a href="/inventory/sell/{{ product._id }}" class="btn btn-sm btn-warning">- Sell</a>
+                        <a href="/inventory/history/{{ product._id }}" class="btn btn-sm btn-info">History</a>
+                        <a href="/inventory/edit/{{ product._id }}" class="btn btn-sm btn-secondary">Edit</a>
                         <a href="/inventory/delete/{{ product._id }}" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>
