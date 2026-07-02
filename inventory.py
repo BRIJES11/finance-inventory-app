@@ -140,6 +140,31 @@ def history(product_id):
     history = list(db.history.find({"product_id": product_id}))
     return render_template("inventory/history.html", product=product, history=history)
 
+@inventory.route("/dashboard", methods=["GET"])
+@login_required
+def dashboard():
+    products = list(db.products.find({"user_id": current_user.id}))
+
+    total_products = len(products)
+    total_stock_value = sum(int(p["buying_price"]) * int(p["quantity"]) for p in products)
+    low_stock_items = [p for p in products if int(p["quantity"]) <= int(p["low_stock_threshold"])]
+    
+    category_stock = {}
+    for p in products:
+        category = p["category"]
+        category_stock[category] = category_stock.get(category, 0) + p["quantity"]
+        
+        
+    return render_template("inventory/dashboard.html",
+        total_products = total_products,
+        total_stock_value = total_stock_value,
+        low_stock_items = low_stock_items,
+        category_stock=category_stock                      
+    )
+    
+
+
+
 
 
 

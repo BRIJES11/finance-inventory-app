@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">📦 Inventory Dashboard</h2>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Products</h5>
+                <h3>{{ total_products }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Total Stock Value</h5>
+                <h3>₦{{ "%.2f"|format(total_stock_value) }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger">
+            <div class="card-body">
+                <h5 class="card-title">Low Stock Items</h5>
+                <h3>{{ low_stock_items|length }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Low Stock Alerts -->
+{% if low_stock_items %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">⚠️ Low Stock Alerts</h5>
+        <table class="table table-striped">
+            <thead class="table-danger">
+                <tr>
+                    <th>Product</th>
+                    <th>SKU</th>
+                    <th>Current Stock</th>
+                    <th>Threshold</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in low_stock_items %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.sku }}</td>
+                    <td><span class="badge bg-danger">{{ product.quantity }}</span></td>
+                    <td>{{ product.low_stock_threshold }}</td>
+                    <td>
+                        <a href="/inventory/restock/{{ product._id }}" class="btn btn-sm btn-success">+ Restock</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<!-- Bar Chart -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Stock Levels by Category</h5>
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const categoryLabels = {{ category_stock.keys()|list|tojson }};
+    const categoryValues = {{ category_stock.values()|list|tojson }};
+
+    new Chart(document.getElementById("barChart"), {
+        type: "bar",
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                label: "Stock Quantity",
+                data: categoryValues,
+                backgroundColor: [
+                    "#36A2EB", "#FF6384", "#FFCE56",
+                    "#4BC0C0", "#9966FF", "#FF9F40"
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+{% endblock %}
