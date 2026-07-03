@@ -43,9 +43,10 @@ app.register_blueprint(expense)
 app.register_blueprint(inventory)
 
 @app.route("/")
-@login_required
 def home():
-    return redirect(url_for("expense.dashboard"))
+    if current_user.is_authenticated:
+        return redirect(url_for("expense.dashboard"))
+    return render_template("home.html")
 
 
 

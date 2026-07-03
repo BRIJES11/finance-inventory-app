@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 text-center">
+        <h1 class="display-4 mb-3">💰 FinTrack</h1>
+        <p class="lead text-muted mb-4">
+            Track your expenses and manage your inventory — all in one place.
+            Built for individuals and small businesses like Mama Titi's shop.
+        </p>
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4>💸 Expense Tracker</h4>
+                        <p class="text-muted">Track income and expenses, view spending charts, and monitor your balance.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4>📦 Inventory Manager</h4>
+                        <p class="text-muted">Manage products, track stock levels, get low stock alerts and view history.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="/auth/register" class="btn btn-success btn-lg me-3">Get Started</a>
+        <a href="/auth/login" class="btn btn-outline-primary btn-lg">Login</a>
+    </div>
+</div>
+
+{% endblock %}
